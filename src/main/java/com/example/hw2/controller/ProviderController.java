@@ -1,5 +1,6 @@
 package com.example.hw2.controller;
 
+import com.example.hw2.exception.CustomException;
 import com.example.hw2.pojo.dto.ProviderDTO;
 import com.example.hw2.pojo.dto.ProviderRequestDTO;
 import com.example.hw2.pojo.entity.Provider;
@@ -28,10 +29,20 @@ public class ProviderController {
 
     @PostMapping()
     public ResponseEntity<String> insert(@RequestBody ProviderRequestDTO requestDTO) {
-        Provider provider=requestDTO.getProvider();
+        Provider provider = requestDTO.getProvider();
         System.out.println(provider);
         if (!provider.checkLegal()) return new ResponseEntity<>("Illegal provider", HttpStatus.NOT_ACCEPTABLE);
         service.insert(provider);
         return new ResponseEntity<>("Insert new provider", HttpStatus.OK);
+    }
+
+    @GetMapping("/customException")
+    public ResponseEntity<ProviderDTO> testCustomException() {
+        throw new CustomException(1, "test Custom Exception");
+    }
+
+    @GetMapping("/runtimeException")
+    public ResponseEntity<ProviderDTO> testRuntimeException() {
+        throw new RuntimeException("test Runtime Exception");
     }
 }
